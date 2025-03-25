@@ -1,6 +1,6 @@
 package ru.job4j.services;
 
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TelegramBotService {
