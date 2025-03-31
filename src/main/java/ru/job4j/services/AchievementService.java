@@ -5,7 +5,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AchievementService {
+public class AchievementService extends BeanNameAware {
 
     @PostConstruct
     public void init() {

@@ -5,7 +5,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MoodService {
+public class MoodService extends BeanNameAware {
 
     @PostConstruct
     public void init() {

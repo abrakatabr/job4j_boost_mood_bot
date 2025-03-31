@@ -5,7 +5,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TelegramBotService {
+public class TelegramBotService extends BeanNameAware {
 
     @PostConstruct
     public void init() {
