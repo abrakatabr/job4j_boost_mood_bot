@@ -1,4 +1,4 @@
-package ru.job4j.bmb.config;
+package ru.job4j.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
