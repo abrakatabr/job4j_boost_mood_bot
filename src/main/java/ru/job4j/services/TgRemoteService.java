@@ -61,7 +61,7 @@ public class TgRemoteService extends TelegramLongPollingBot {
             var message = update.getMessage();
             long chatId = message.getChatId();
             long clientId = message.getFrom().getId();
-            if ("/start".equals(message.getText()) && userRepository.findAll().contains(new User())) {
+            if ("/start".equals(message.getText())) {
                 boolean contains = false;
                 for (User user : userRepository.findAll()) {
                     if (user.getClientId() == clientId && user.getChatId() == chatId) {
@@ -74,6 +74,7 @@ public class TgRemoteService extends TelegramLongPollingBot {
                     user.setChatId(chatId);
                     user.setClientId(clientId);
                     userRepository.save(user);
+                    System.out.println("User отправлен в БД");
                 }
             }
             send(sendButtons(chatId));
