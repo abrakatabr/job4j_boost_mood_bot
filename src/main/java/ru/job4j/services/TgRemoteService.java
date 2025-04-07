@@ -11,10 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.job4j.repository.UserRepository;
 import ru.job4j.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TgRemoteService extends TelegramLongPollingBot {
@@ -50,8 +47,7 @@ public class TgRemoteService extends TelegramLongPollingBot {
         return botName;
     }
 
-    @Override
-    public void onUpdateReceived(Update update) {
+    @Override    public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
             var data = update.getCallbackQuery().getData();
             var chatId = update.getCallbackQuery().getMessage().getChatId();
@@ -62,14 +58,8 @@ public class TgRemoteService extends TelegramLongPollingBot {
             long chatId = message.getChatId();
             long clientId = message.getFrom().getId();
             if ("/start".equals(message.getText())) {
-                boolean contains = false;
-                for (User user : userRepository.findAll()) {
-                    if (user.getClientId() == clientId && user.getChatId() == chatId) {
-                        contains = true;
-                        break;
-                    }
-                }
-                if (!contains) {
+                Optional<User> contains = userRepository.findByClientIdAndChatId(clientId, chatId);
+                if (contains.isEmpty()) {
                     var user = new User();
                     user.setChatId(chatId);
                     user.setClientId(clientId);
