@@ -3,16 +3,21 @@ package ru.job4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.job4j.model.Award;
 import ru.job4j.model.Mood;
 import ru.job4j.model.MoodContent;
 import ru.job4j.repository.AwardRepository;
 import ru.job4j.repository.MoodContentRepository;
 import ru.job4j.repository.MoodRepository;
+import ru.job4j.services.TgRemoteService;
 
 import java.util.ArrayList;
 
@@ -83,6 +88,20 @@ public class Main {
             awards.add(new Award("Разблокировка мини-игр", "После 14 дней хорошего настроения. Награда: Доступ к развлекательным мини-играм внутри приложения.", 14));
             awards.add(new Award("Персональное поздравление", "После 50 дней хорошего настроения. Награда: Персонализированное сообщение от команды приложения или вдохновляющая цитата.", 50));
             awardRepository.saveAll(awards);
+        };
+    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+            var bot = ctx.getBean(TgRemoteService.class);
+            var botsApi = new TelegramBotsApi(DefaultBotSession.class);
+            try {
+                botsApi.registerBot(bot);
+                System.out.println("Бот успешно зарегистрирован");
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         };
     }
 }
