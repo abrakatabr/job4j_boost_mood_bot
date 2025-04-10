@@ -12,4 +12,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAll();
 
     Optional<User> findByClientIdAndChatId(long clientId, long chatId);
+
+    Optional<User> findByClientId(long clientId);
 }
