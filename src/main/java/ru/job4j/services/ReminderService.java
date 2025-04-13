@@ -9,11 +9,11 @@ import ru.job4j.repository.UserRepository;
 
 @Component
 public class ReminderService {
-    private final TgRemoteService tgRemoteService;
+    private final TelegramBotService telegramBotService;
     private final UserRepository userRepository;
 
-    public ReminderService(TgRemoteService tgRemoteService, UserRepository userRepository) {
-        this.tgRemoteService = tgRemoteService;
+    public ReminderService(TelegramBotService telegramBotService, UserRepository userRepository) {
+        this.telegramBotService = telegramBotService;
         this.userRepository = userRepository;
     }
 
@@ -25,15 +25,5 @@ public class ReminderService {
     @PreDestroy
     public void destroy() {
         System.out.println("Bean ReminderService will be destroyed");
-    }
-
-    @Scheduled(fixedRateString = "${remind.period}")
-    public void ping() {
-        for (var user : userRepository.findAll()) {
-            var message = new SendMessage();
-            message.setChatId(user.getChatId());
-            message.setText("Ping");
-            tgRemoteService.send(message);
-        }
     }
 }

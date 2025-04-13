@@ -46,11 +46,13 @@ public class BotCommandHandler {
     }
 
     private Optional<Content> handleStartCommand(long chatId, Long clientId) {
-        var user = new User();
-        user.setClientId(clientId);
-        user.setChatId(chatId);
-        userRepository.save(user);
-        var content = new Content(user.getChatId());
+        if (userRepository.findByClientIdAndChatId(clientId, chatId).isEmpty()) {
+            var user = new User();
+            user.setClientId(clientId);
+            user.setChatId(chatId);
+            userRepository.save(user);
+        }
+        var content = new Content(chatId);
         content.setText("Как настроение?");
         content.setMarkup(tgUI.buildButtons());
         return Optional.of(content);

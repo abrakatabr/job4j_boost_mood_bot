@@ -14,6 +14,10 @@ public class Content {
         this.chatId = chatId;
     }
 
+    public Long getChatId() {
+        return chatId;
+    }
+
     public String getText() {
         return text;
     }
