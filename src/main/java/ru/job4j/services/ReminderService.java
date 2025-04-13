@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.job4j.repository.UserRepository;
 
 @Component
-public class ReminderService extends BeanNameAware {
+public class ReminderService {
     private final TgRemoteService tgRemoteService;
     private final UserRepository userRepository;
 

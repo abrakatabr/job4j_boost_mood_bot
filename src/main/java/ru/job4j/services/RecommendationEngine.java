@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-public class RecommendationEngine extends BeanNameAware {
+public class RecommendationEngine {
     private final List<ContentProvider> contents;
     private static final Random RND = new Random(System.currentTimeMillis());
 

@@ -12,7 +12,7 @@ import ru.job4j.model.User;
 import java.util.Optional;
 
 @Service
-public class BotCommandHandler extends BeanNameAware {
+public class BotCommandHandler {
     private final UserRepository userRepository;
     private final MoodService moodService;
     private final TgUI tgUI;
