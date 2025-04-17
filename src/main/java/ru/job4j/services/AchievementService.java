@@ -48,21 +48,21 @@ public class AchievementService implements ApplicationListener<UserEvent> {
         List<Award> userAwards = achievementRepository.findByUser(user).stream()
                 .map(Achievement::getAward)
                 .collect(Collectors.toList());
-        awardRepository.findAll().stream()
+        List<Achievement> newAchievements = awardRepository.findAll().stream()
                 .filter(a -> a.getDays() <= daysCount)
+                .filter(a -> !userAwards.contains(a))
+                .map(a -> new Achievement(user,
+                a,
+                LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
+                .collect(Collectors.toList());
+        achievementRepository.saveAll(newAchievements);
+        newAchievements.stream()
                 .forEach(a -> {
-                            if (!userAwards.contains(a)) {
-                                Achievement achievement = new Achievement(user,
-                                        a,
-                                        LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-                                achievementRepository.save(achievement);
-                                Content content = new Content(user.getChatId());
-                                String text = "Вы получили награду: " + a.getTitle()
-                                        + System.lineSeparator() + a.getDescription();
-                                content.setText(text);
-                                sentContent.sent(content);
-                            }
-                        }
-                );
+                    Content content = new Content(user.getChatId());
+                    String text = "Вы получили награду: " + a.getAward().getTitle()
+                            + System.lineSeparator() + a.getAward().getDescription();
+                    content.setText(text);
+                    sentContent.sent(content);
+                });
     }
 }
