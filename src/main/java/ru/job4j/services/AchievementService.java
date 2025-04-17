@@ -2,6 +2,7 @@ package ru.job4j.services;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.event.UserEvent;
 import ru.job4j.model.*;
@@ -16,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class AchievementService implements ApplicationListener<UserEvent> {
     private final MoodLogRepository moodLogRepository;
     private final AwardRepository awardRepository;
