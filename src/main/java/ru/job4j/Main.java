@@ -17,7 +17,8 @@ import ru.job4j.model.MoodContent;
 import ru.job4j.repository.AwardRepository;
 import ru.job4j.repository.MoodContentRepository;
 import ru.job4j.repository.MoodRepository;
-import ru.job4j.services.TelegramBotService;
+import ru.job4j.services.TelegramBotFakeService;
+import ru.job4j.services.TelegramBotRealService;
 
 import java.util.ArrayList;
 
@@ -94,7 +95,8 @@ public class Main {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-            var bot = ctx.getBean(TelegramBotService.class);
+            var bot = ctx.containsBean("telegramBotRealService")
+                    ? ctx.getBean(TelegramBotRealService.class) : ctx.getBean(TelegramBotFakeService.class);
             var botsApi = new TelegramBotsApi(DefaultBotSession.class);
             try {
                 botsApi.registerBot(bot);
