@@ -55,7 +55,7 @@ public class AchievementService implements ApplicationListener<UserEvent> {
                 a,
                 LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
                 .collect(Collectors.toList());
-        saveNewAchievements(newAchievements);
+        saveAll(newAchievements);
         newAchievements.stream()
                 .forEach(a -> {
                     Content content = new Content(user.getChatId());
@@ -67,7 +67,7 @@ public class AchievementService implements ApplicationListener<UserEvent> {
     }
 
     @Transactional
-    private void saveNewAchievements(Iterable<Achievement> newAchievements) {
-        achievementRepository.saveAll(newAchievements);
+    public void saveAll(Iterable<Achievement> achievements) {
+        achievementRepository.saveAll(achievements);
     }
 }
