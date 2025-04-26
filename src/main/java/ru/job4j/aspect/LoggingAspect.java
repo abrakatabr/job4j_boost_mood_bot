@@ -26,7 +26,6 @@ public class LoggingAspect {
         for (Object arg : joinPoint.getArgs()) {
             args.add(arg.toString());
         }
-        logger.info("Метод: " + joinPoint.getSignature().getName() + ". Аргументы: "
-        + args.toString());
+        logger.info("Метод: {}. Аргументы: {}", joinPoint.getSignature().getName(), args.toString());
     }
 }
