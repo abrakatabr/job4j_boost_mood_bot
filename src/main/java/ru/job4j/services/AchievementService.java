@@ -42,7 +42,7 @@ public class AchievementService implements ApplicationListener<UserEvent> {
         var user = event.getUser();
         List<MoodLog> moodLogs = moodLogRepository.findByUserId(user.getId());
         List<Mood> moods = moodLogs.stream()
-                .sorted(Comparator.comparingLong(MoodLog::getCreatedAt))
+                .sorted(Comparator.comparingLong(MoodLog::getCreatedAt).reversed())
                 .map(ml -> ml.getMood()).collect(Collectors.toList());
         long daysCount = moods.stream().takeWhile(Mood::isGood).count();
         List<Award> userAwards = achievementRepository.findByUser(user).stream()
