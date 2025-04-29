@@ -5,8 +5,7 @@ import ru.job4j.model.Content;
 import ru.job4j.model.Mood;
 import ru.job4j.model.MoodLog;
 import ru.job4j.model.User;
-import ru.job4j.repository.MoodFakeRepository;
-import ru.job4j.repository.MoodLogFakeRepository;
+import ru.job4j.repository.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -39,7 +38,13 @@ class ReminderServiceTest {
         moodLog.setCreatedAt(yesterday);
         moodLogRepository.save(moodLog);
         var tgUI = new TgUI(moodRepository);
-        new ReminderService(sentContent, moodLogRepository, tgUI)
+        var adviceRepository = new AdviceFakeRepository();
+        var adviceStatusRepository = new AdviceStatusFakeRepository();
+        var userRepository = new UserFakeRepository();
+        var adviceLogRepository = new AdviceLogFakeRepository();
+        var adviceService = new AdviceService(adviceStatusRepository, userRepository, moodLogRepository,
+                adviceRepository, adviceLogRepository);
+        new ReminderService(sentContent, moodLogRepository, adviceService, adviceStatusRepository, tgUI)
                 .remindUsers();
         assertThat(result.iterator().next().getMarkup().getKeyboard()
                 .iterator().next().iterator().next().getText()).isEqualTo("Good");

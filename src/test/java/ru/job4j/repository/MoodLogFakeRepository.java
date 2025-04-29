@@ -9,6 +9,7 @@ import ru.job4j.repository.MoodLogRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,4 +38,9 @@ public class MoodLogFakeRepository
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<MoodLog> findLastMoodLogByUser(User user) {
+        return memory.values().stream()
+                .filter(m -> user.equals(m.getUser())).max(Comparator.comparingLong(MoodLog::getCreatedAt));
+    }
 }

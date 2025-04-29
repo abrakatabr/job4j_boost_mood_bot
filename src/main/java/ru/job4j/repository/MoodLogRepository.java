@@ -8,6 +8,7 @@ import ru.job4j.model.MoodLog;
 import ru.job4j.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MoodLogRepository extends CrudRepository<MoodLog, Long> {
@@ -17,4 +18,8 @@ public interface MoodLogRepository extends CrudRepository<MoodLog, Long> {
             + "SELECT 1 FROM MoodLog ml WHERE ml.user = u AND ml.createdAt BETWEEN :startOfDay AND :endOfDay)")
     List<User> findUsersWhoDidNotVoteToday(@Param("startOfDay") long startOfDay,
                                            @Param("endOfDay") long endOfDay);
+
+    @Query("SELECT m From MoodLog m WHERE m.createdAt = "
+            + "(SELECT max(m.createdAt) from MoodLog m WHERE m.user = :user)")
+    Optional<MoodLog> findLastMoodLogByUser(@Param("user") User user);
 }

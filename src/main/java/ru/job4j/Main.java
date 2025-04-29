@@ -14,9 +14,11 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.job4j.model.Award;
 import ru.job4j.model.Mood;
 import ru.job4j.model.MoodContent;
+import ru.job4j.model.Advice;
 import ru.job4j.repository.AwardRepository;
 import ru.job4j.repository.MoodContentRepository;
 import ru.job4j.repository.MoodRepository;
+import ru.job4j.repository.AdviceRepository;
 import ru.job4j.services.TelegramBotFakeService;
 import ru.job4j.services.TelegramBotRealService;
 
@@ -65,13 +67,13 @@ public class Main {
         };
     }
 
-            @Bean
-            CommandLineRunner loadAwardDatabase(AwardRepository awardRepository) {
-                return args -> {
-                    var moods = awardRepository.findAll();
-                    if (!moods.isEmpty()) {
-                        return;
-                    }
+    @Bean
+    CommandLineRunner loadAwardDatabase(AwardRepository awardRepository) {
+        return args -> {
+            var moods = awardRepository.findAll();
+            if (!moods.isEmpty()) {
+                return;
+            }
             var awards = new ArrayList<Award>();
             awards.add(new Award("Смайлик дня", "За 1 день хорошего настроения. Награда: Веселый смайлик или стикер, отправленный пользователю в качестве поощрения.", 1));
             awards.add(new Award("Настроение недели", "За 7 последовательных дней хорошего или отличного настроения. Награда: Специальный значок или иконка, отображаемая в профиле пользователя в течение недели.", 7));
@@ -89,6 +91,26 @@ public class Main {
             awards.add(new Award("Разблокировка мини-игр", "После 14 дней хорошего настроения. Награда: Доступ к развлекательным мини-играм внутри приложения.", 14));
             awards.add(new Award("Персональное поздравление", "После 50 дней хорошего настроения. Награда: Персонализированное сообщение от команды приложения или вдохновляющая цитата.", 50));
             awardRepository.saveAll(awards);
+        };
+    }
+
+    @Bean
+    CommandLineRunner loadAdviceDatabase(AdviceRepository adviceRepository) {
+        return args -> {
+            var advices = adviceRepository.findAll();
+            if (!advices.isEmpty()) {
+                return;
+            }
+            var data = new ArrayList<Advice>();
+            data.add(new Advice("Попробуйте прогуляться на природе для поднятия настроения!", false));
+            data.add(new Advice("Займитесь спортом для психологиечкой разгрузки!", false));
+            data.add(new Advice("Отдохните немного, вы очень загружены!", false));
+            data.add(new Advice("Проведите время с друзьями чтобы восстановиться!", false));
+            data.add(new Advice("У вас все хорошо! Вы можете сделать все дела, которые давно откладывали!", true));
+            data.add(new Advice("Вам нет равных! Решайте самую трудную рабочую задачу!", true));
+            data.add(new Advice("Вы полны сил! Время научиться чему-то новому!", true));
+            data.add(new Advice("Отличный настрой! Хороший день чтобы начать новое дело!", true));
+            adviceRepository.saveAll(data);
         };
     }
 

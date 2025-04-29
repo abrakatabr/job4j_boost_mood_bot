@@ -98,7 +98,7 @@ public class MoodService {
             StringBuilder sb = new StringBuilder();
             userAchievement.stream()
                     .forEach(a -> {
-                        String formattedDate = formatter.format(Instant.ofEpochSecond(a.getCreateAt()));
+                        String formattedDate = formatter.format(Instant.ofEpochMilli(a.getCreateAt()));
                         sb.append(formattedDate).append(": ").append(a.getAward().getTitle()).append(System.lineSeparator());
                     });
             content.setText(sb.toString());
