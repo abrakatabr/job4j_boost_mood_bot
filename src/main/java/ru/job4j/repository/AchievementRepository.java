@@ -14,4 +14,7 @@ import java.util.List;
 @Repository
 public interface AchievementRepository extends CrudRepository<Achievement, Long> {
     List<Achievement> findByUser(User user);
+
+    @Transactional
+    <S extends Achievement> Iterable<S> saveAll(Iterable<S> entities);
 }
