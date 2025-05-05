@@ -3,23 +3,29 @@ package ru.job4j.services;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.BotOptions;
+import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import ru.job4j.condition.OnFakeCondition;
 import ru.job4j.model.Content;
 
 @Service
 @Conditional(OnFakeCondition.class)
-public class TelegramBotFakeService extends TelegramLongPollingBot implements SentContent {
+public class TelegramBotFakeService implements SentContent, LongPollingBot {
     private final BotCommandHandler handler;
     private final String botName;
+    private final String botToken;
+    private final DefaultBotOptions options = new DefaultBotOptions();
 
     public TelegramBotFakeService(@Value("${telegram.bot.name}") String botName,
                               @Value("${telegram.bot.token}") String botToken,
                               BotCommandHandler handler) {
-        super(botToken);
         this.handler = handler;
         this.botName = botName;
+        this.botToken = botToken;
         System.out.println("Бин фейкового телеграм бота создан");
     }
 
@@ -35,8 +41,26 @@ public class TelegramBotFakeService extends TelegramLongPollingBot implements Se
     }
 
     @Override
+    public DefaultBotOptions getOptions() {
+        return options;
+    }
+
+    @Override
+    public void clearWebhook() throws TelegramApiRequestException { }
+
+    @Override
+    public void onClosing() {
+        LongPollingBot.super.onClosing();
+    }
+
+    @Override
     public String getBotUsername() {
         return botName;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
     }
 
     @Override
